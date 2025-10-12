@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Posters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1c2229;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .poster {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            background: #2c3440;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .poster:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .poster:hover img {
+            transform: scale(1.02);
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #modal.active {
+            display: flex;
+        }
+
+        #modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 768px) {
+            #grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 12px;
+                padding: 16px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 14px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="grid"></div>
+    
+    <div id="modal">
+        <img src="" alt="">
+    </div>
+
+    <script>
+        const posterData = [{"original": "posters\\casino-royale.webp", "thumb": "thumbs\\casino-royale.webp", "name": "casino-royale"}, {"original": "posters\\goodfellas.webp", "thumb": "thumbs\\goodfellas.webp", "name": "goodfellas"}, {"original": "posters\\heat.webp", "thumb": "thumbs\\heat.webp", "name": "heat"}, {"original": "posters\\lotr-1.webp", "thumb": "thumbs\\lotr-1.webp", "name": "lotr-1"}, {"original": "posters\\lotr-2.webp", "thumb": "thumbs\\lotr-2.webp", "name": "lotr-2"}, {"original": "posters\\lotr-3.webp", "thumb": "thumbs\\lotr-3.webp", "name": "lotr-3"}, {"original": "posters\\parasite.webp", "thumb": "thumbs\\parasite.webp", "name": "parasite"}, {"original": "posters\\scream.webp", "thumb": "thumbs\\scream.webp", "name": "scream"}, {"original": "posters\\skyfall.webp", "thumb": "thumbs\\skyfall.webp", "name": "skyfall"}, {"original": "posters\\the-batman.webp", "thumb": "thumbs\\the-batman.webp", "name": "the-batman"}, {"original": "posters\\the-big-lebowski.webp", "thumb": "thumbs\\the-big-lebowski.webp", "name": "the-big-lebowski"}, {"original": "posters\\the-godfather.webp", "thumb": "thumbs\\the-godfather.webp", "name": "the-godfather"}, {"original": "posters\\the-grand-budapest-hotel.webp", "thumb": "thumbs\\the-grand-budapest-hotel.webp", "name": "the-grand-budapest-hotel"}, {"original": "posters\\the-shawshank-redemption.webp", "thumb": "thumbs\\the-shawshank-redemption.webp", "name": "the-shawshank-redemption"}];
+        
+        const grid = document.getElementById('grid');
+        const modal = document.getElementById('modal');
+        const modalImg = modal.querySelector('img');
+
+        // Load posters from embedded data
+        posterData.forEach(poster => {
+            const posterDiv = document.createElement('div');
+            posterDiv.className = 'poster';
+            
+            const img = document.createElement('img');
+            img.src = poster.thumb;
+            img.alt = poster.name;
+            img.loading = 'lazy';
+            
+            posterDiv.appendChild(img);
+            
+            posterDiv.addEventListener('click', () => {
+                modalImg.src = poster.original;
+                modalImg.alt = poster.name;
+                modal.classList.add('active');
+            });
+            
+            grid.appendChild(posterDiv);
+        });
+
+        // Close modal on click
+        modal.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
